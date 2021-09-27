@@ -15,14 +15,14 @@ const baseUrl  = '/api/v1';
 // TASK ROUTES
 app.use(baseUrl,Routes);
 app.use(express.static(path.join(__dirname,'public')));
-app.get('*',(res,req)=>{
+/*app.get('*',(res,req)=>{
     res.sendFile(path.join(__dirname,'public/index.html'))
-})
-app.get("/",(req,res)=>{
+})*/
+/*app.get("/",(req,res)=>{
     res.send(
          "<div style='background-color:black;text-align:center;height:100%'><h3 style='padding:150px;color:blue;text-decoration:underline'> WELCOME TO ENTERPRISE-BC </h3> </div>"
     );
-})
+})*/
 
 /*app.all('*' , (req , res , next)=>{
 
