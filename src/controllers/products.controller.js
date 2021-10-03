@@ -2,7 +2,7 @@
 const joi         = require('joi')
 const JwtService  =   require('../services/JwtService');
 const productModel  = require('../models/products.model');
-const bcrypt  =    require('bcrypt');
+const bcrypt  =   require('bcryptjs');
 const chalk   =    require('chalk');
 const log     =    console.log;
 const{ json } = require('body-parser');

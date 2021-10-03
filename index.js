@@ -45,7 +45,7 @@ app.use((err , req , res , next ) =>{
 
 app.use(errorHandler);
 //listining the port
-app.listen(port,()=>{
+app.listen(()=>{
     console.log("Express server is running at PORT "+port);
 })
 
