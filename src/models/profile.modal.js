@@ -1,19 +1,10 @@
 
   var dbConn = require('../../config/db.config');
-
-  //var profileModel = function(query){
-   /*  this.Id              =     query.Id;
-     this.fullname        =     query.fullname;
-     this.contact         =     query.contact;
-     this.query           =     query.query;
-     this.querydate       =     new Date()*/
-  //}
   var profileModel={
       CreateProfile:{},
       UpdateProfile:{},
       GetProfile   :{}
   }
-
 // CREATE  PROFILE
 profileModel.CreateProfile= (reqData , result) =>
 {

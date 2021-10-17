@@ -1,11 +1,9 @@
 var dbConn = require('../../config/db.config');
-  
   var addressModel={
       CreateAddressDetail:{},
       UpdateAddressDetail:{},
       GetAddressDetail:{},
   }
-
 // CREATE  ADDRESS    DETAIL
 addressModel.CreateAddressDetail= (reqData , result) =>
 {

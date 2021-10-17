@@ -1,8 +1,6 @@
 
   var dbConn = require('../../config/db.config');
-
   var usersModel = function(user){
-
      this.Id              =     user.Id;
      this.fullname        =     user.fullname;
      this.email           =     user.email;
@@ -11,7 +9,17 @@
      this.accesstype      =     user.accesstype;
 
   }
-
+// GET  ALL Registered USERS LIST
+usersModel.getAllRegisteredUsers= (result) =>
+{
+   dbConn.query( "SELECT *  FROM register ",(err , res)=>{
+     if(err){
+        result(err , null)
+     }else{
+        result(null , res) 
+     }
+   })
+}
  //get all users
  /* usersModel.getAllUsers = (result)=>{
      dbConn.query("SELECT * FROM users" , (err , res )=>{
@@ -45,7 +53,7 @@ usersModel.createUser = (reqData , result) =>
  // create customer user
  usersModel.cusReg = (reqData , result) =>
  {
-   dbConn.query('INSERT INTO Register SET?' , reqData , (err , res)=>{
+   dbConn.query('INSERT INTO register SET?' , reqData , (err , res)=>{
        if(err)
        {
             result( err, null)
@@ -57,7 +65,7 @@ usersModel.createUser = (reqData , result) =>
 // UPDATE ADMIN USER
 usersModel.updateAdminUser = (rData , result) =>
 {
-  dbConn.query("UPDATE Register SET fullname=?, password=?, contact=?,accesstype=? WHERE id =?", 
+  dbConn.query("UPDATE register SET fullname=?, password=?, contact=?,accesstype=? WHERE id =?", 
   [rData.fullname ,rData.password, rData.contact,rData.accesstype , rData.id] ,(err,res)=>{
       if(err)
       {
@@ -68,14 +76,70 @@ usersModel.updateAdminUser = (rData , result) =>
   })
 }
  // Delete Admin User
- usersModel.deleteAdminUser = (id  , result) =>
+ usersModel.deleteAdminUser = (body  , result) =>
  {
-     dbConn.query("DELETE  FROM Register   WHERE id =?",[id] ,(err,res)=>{ 
+     dbConn.query("DELETE  FROM register   WHERE id =?",[body.delId] ,(err,res)=>{ 
        if(err)
        {
             result( err, null)
        }else{
-            result(null ,res) 
+           // DELETING FROM ACCOUNT 
+           dbConn.query("DELETE  FROM user_account WHERE userId =?",[body.delId] ,(err,res)=>{ 
+               if(err)
+               {
+                    result( err, null)
+               }else{
+                   // DELETING FROM ADDRESS
+                  dbConn.query("DELETE  FROM address WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                    if(err)
+                    {
+                         result( err, null)
+                    }else{
+                       // DELETING FROM  BANKSDETAILS
+                       dbConn.query("DELETE  FROM bankdetails WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                         if(err)
+                         {
+                              result( err, null)
+                         }else{
+                            // DELETING FROM PROFILE
+                            dbConn.query("DELETE  FROM profile WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                              if(err)
+                              {
+                                   result( err, null)
+                              }else{
+                                 // DELETING FROM WITHDRAWAL
+                                 dbConn.query("DELETE  FROM withdrawal WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                                   if(err)
+                                   {
+                                        result( err, null)
+                                   }else{
+                                      //DELETING FROM PIN_REQUEST
+                                      dbConn.query("DELETE  FROM pin_request WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                                        if(err)
+                                        {
+                                             result( err, null)
+                                        }else{
+                                           // DELETING FROM MY PINS
+                                           dbConn.query("DELETE  FROM mypins WHERE userId =?",[body.delId] ,(err,res)=>{ 
+                                             if(err)
+                                             {
+                                                  result( err, null)
+                                             }else{
+                                                 result(null ,res) 
+                                             }
+                                         }) 
+                                        }
+                                    })
+                                   }
+                               })
+                              }
+                          })
+                         }
+                     }) 
+                    }
+                })
+               }
+           })
        }
    })
  }

@@ -1,6 +1,4 @@
-
 var dbConn = require('../../config/db.config');
-
 var pinModel={
     getAllPinRequest:{},
     getAllActPinRequest:{},
@@ -9,7 +7,6 @@ var pinModel={
     actPinReq:{},
     genPinReq:{},
 }
-
 // CREATE  PIN REQUEST
 pinModel.createPinRequest= (reqData , result) =>
 {
@@ -22,7 +19,6 @@ pinModel.createPinRequest= (reqData , result) =>
       }
   })
 }
-
 // GETING  PIN BY USER CONTACT FROM REQ TABLE
 pinModel.getAllPinRequest =(obj, result)=>{
     dbConn.query("SELECT * FROM pin_request WHERE usercontact=?",[obj.usercontact],(err, res)=>{
@@ -92,9 +88,7 @@ pinModel.genPinReq = (req, result)=>{
         }
     })
 }
-
 }
-
 // DELETE PIN REQUEST
 pinModel.delPinReq= ( id,result) =>
 {

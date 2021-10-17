@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js"
+    "start": "node index.js"
   },
   "author": "Ashraf",
   "license": "ISC",
   "dependencies": {
+    "@vonage/server-sdk": "^2.10.10",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -20,6 +21,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
+    "fast-two-sms": "^3.0.0",
     "fileupload": "^1.0.0",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",

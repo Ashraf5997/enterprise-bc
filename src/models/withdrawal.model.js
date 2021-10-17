@@ -9,13 +9,29 @@ var withdrawalModel={
 // CREATE  WITHDRAWAL
 withdrawalModel.createWithdrawal= (reqData , result) =>
 {
-    dbConn.query('INSERT INTO withdrawal SET?' , reqData , (err , res)=>{
+  let reqDataa ={
+    fullName       : reqData.fullName,
+    userId         : reqData.userId,
+    contact        : reqData.contact,
+    bankName       : reqData.bankName,
+    branchName     : reqData.branchName,
+    accountNumber  : reqData.accountNumber,
+    ifsc           : reqData.ifsc,
+    amount         : reqData.amount,
+    reqDate       : new Date(),
+    payDate       : new Date(),
+    status        :"pending",
+    payBy         :"pending",
+    tId           :"pending"
+  }
+  let Remamount = reqData.Aviamount - reqData.amount
+    dbConn.query('INSERT INTO withdrawal SET?' , reqDataa , (err , res)=>{
         if(err)
         {
             result( err, null)
         }else{
-          // result(null ,res) 
-          dbConn.query("UPDATE user_account SET RI=0,TI=0,SLI=0,SI=0,LI=0 WHERE userId =?",[reqData.userId],(err,res)=>{ 
+          // UPDATING TOTAL AMOUNT
+          dbConn.query("UPDATE user_account SET RI=0,SLI=0,SI=0,LI=0,  TI=?WHERE userId =?",[Remamount,reqData.userId],(err,res)=>{ 
             if(err)
             {         
                 result( err, null)
@@ -23,7 +39,6 @@ withdrawalModel.createWithdrawal= (reqData , result) =>
                  result(null ,res) 
             }
             })
-          
         }
     })
 }

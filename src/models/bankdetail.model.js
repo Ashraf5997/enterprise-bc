@@ -1,12 +1,9 @@
 var dbConn = require('../../config/db.config');
-
-  
   var bankModel={
       CreateBankDetail:{},
       UpdateBankDetail:{},
       GetBankDetail   :{}
   }
-
 // CREATE  BANK DETAIL
 bankModel.CreateBankDetail= (reqData , result) =>
 {

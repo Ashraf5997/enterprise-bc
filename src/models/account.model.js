@@ -1,10 +1,8 @@
 const { exist } = require('joi');
 var dbConn = require('../../config/db.config');
-
 var accountModel={
     createAccount:{},
 }
-
 // CREATE  ACCOUNT
 accountModel.createAccount= (reqData , result) =>
 {
@@ -17,7 +15,6 @@ accountModel.createAccount= (reqData , result) =>
         }
     })
 }
-
 // GET  ACCOUNT BY ID
 accountModel.getAccount= (reqData , result) =>
 {
@@ -30,7 +27,6 @@ accountModel.getAccount= (reqData , result) =>
     }
 })
 }
-
 // GET  ALL FOR ACTIVATION ACCOUNT  REQUEST
 accountModel.getAllAccountRequest= (result) =>
 {
@@ -43,7 +39,6 @@ accountModel.getAllAccountRequest= (result) =>
     }
 })
 }
-
 //  ACCOUNT ACT DEACTIVE 
 accountModel.actDact= (reqData,result) =>
 {
@@ -70,7 +65,6 @@ accountModel.updateTDate= (reqData,result) =>
     }
 })
 }
-
 //  SLITDate update
 accountModel.updateSLITDate= (reqData,result) =>
 {
@@ -83,7 +77,6 @@ accountModel.updateSLITDate= (reqData,result) =>
     }
 })
 }
-
 //  RI update
 accountModel.updateRI= (reqData,result) =>
 {
@@ -96,7 +89,6 @@ accountModel.updateRI= (reqData,result) =>
     }
     })
 }
-
 // GET  ACCOUNTId
 accountModel.searchAccountId= (accountId,result) =>
 {
@@ -109,8 +101,6 @@ accountModel.searchAccountId= (accountId,result) =>
     }
     })
 }
-
-
 // GET  ALL ACTIVE USERS COUNT 
 accountModel.getAllActiveUsers= (result) =>
 {
@@ -122,7 +112,6 @@ accountModel.getAllActiveUsers= (result) =>
      }
    })
 }
-
 //  GET DOWNLINK MEMBERS 
 accountModel.getDownLinkMembers = (refId,result)=>{
     dbConn.query("SELECT *  FROM  user_account WHERE referenceId =?",[refId],(err,res)=>{ 
@@ -160,10 +149,9 @@ accountModel.deletePID = (PID,result)=>{
 //  UPDATE LEVEL INCOME
 accountModel.updateLevelIncome= (referenceId,result) =>
 {
-   
     dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>{ 
         if(err)
-        {   console.log("Error 1") ;    
+        {     
             result( err, null)
         }else
         {
@@ -177,31 +165,30 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                 let level       = res[0].level;
                 let LI          = res[0].LI; 
                 let TI          = res[0].TI;
+                let SI          = res[0].SI;
                 let dM = res[0].dMembers;
                 if( level == 0)
                 {
                     level = 1;
-                }else{
+                }/*else{
                     level =level+1;
-                }
+                }*/
                 LI = LI+20;
+                SI =SI+20;
                 dM =dM+1;
-                 TI =TI+20;
+                 TI =TI+20+20;
                 console.log("TEST LI = "+LI)
-                // level 1  ############# LEVEL 1
-                dbConn.query(" UPDATE user_account SET level=?,LI=?,dMembers=?,TI=?  WHERE accountId =? ",[level,LI,dM,TI,accountId],(err,res)=>
+                dbConn.query(" UPDATE user_account SET level=?,LI=?,dMembers=?,TI=? ,SI=? WHERE accountId =? ",[level,LI,dM,TI,SI,accountId],(err,res)=>
                 { 
                     if(err)
-                    {     console.log("Error 2") ;         
+                    {            
                         result( err, null)
                     }else
                     {
-                        // result(null ,res) 
-                      //  console.log("SASA"+JSON.stringify(res))
                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                         { 
                             if(err)
-                            {       console.log("Error 3") ;     
+                            {           
                                     result( err, null)
                             }else
                             {
@@ -210,7 +197,6 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                     result(null ,res) 
                                 }else
                                 {
-                                //  console.log("###########"+res.length)
                                     let accountId   = res[0].accountId
                                     let referenceId = res[0].referenceId;
                                     let level       = res[0].level;
@@ -223,23 +209,20 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                 dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                 { 
                                     if(err)
-                                    {   console.log("Error 4") ;          
+                                    {         
                                         result( err, null)
                                     }else
                                     {
                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                         { 
                                             if(err)
-                                            {       console.log("Error 5") ;    
+                                            {        
                                                     result( err, null)
                                             }else
                                             {
-                                             //   console.log("+++++++++"+JSON.stringify(res))
                                                 if( res.length == 0)
                                                 {
-                                                 // console.log("ASHRAF JAMAL SB")
                                                   result(null ,res);
-                                                   // return({status:409 ,message:'Account not found to update LI , please contact with  manager ' }  )    
                                                 }else
                                                 {
                                                 let accountId   = res[0].accountId
@@ -254,13 +237,13 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                 dbConn.query(" UPDATE user_account SET level=?,LI=?,TI=?  WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                 { 
                                                     if(err)
-                                                    {    console.log("Error 6") ;        
+                                                    {           
                                                          result( err, null)
                                                     }else
                                                     {
                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>{ 
                                                             if(err)
-                                                            {       console.log("Error 7") ;     
+                                                            {         
                                                                     result( err, null)
                                                             }else
                                                             {
@@ -281,14 +264,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                 { 
                                                                     if(err)
-                                                                    {      console.log("Error 8") ;      
+                                                                    {         
                                                                            result( err, null)
                                                                     }else
                                                                     {
                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                         { 
                                                                             if(err)
-                                                                            {       console.log("Error 9") ;     
+                                                                            {           
                                                                                     result( err, null)
                                                                             }else
                                                                             {
@@ -309,14 +292,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                 { 
                                                                                     if(err)
-                                                                                    {     console.log("Error 10") ;       
+                                                                                    {           
                                                                                           result( err, null)
                                                                                     }else
                                                                                     {
                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                         { 
                                                                                             if(err)
-                                                                                            {         console.log("Error 11") ;   
+                                                                                            {         
                                                                                                       result( err, null)
                                                                                             }else
                                                                                             {
@@ -336,14 +319,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=?,TI=?  WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                 { 
                                                                                                     if(err)
-                                                                                                    {     console.log("Error 12") ;       
+                                                                                                    {         
                                                                                                         result( err, null)
                                                                                                     }else
                                                                                                     {
                                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                                         { 
                                                                                                             if(err)
-                                                                                                            {   console.log("Error 13") ;         
+                                                                                                            {           
                                                                                                                result( err, null)
                                                                                                             }else
                                                                                                             {
@@ -363,14 +346,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=?,TI=?  WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                                 { 
                                                                                                                     if(err)
-                                                                                                                    {   console.log("Error 14") ;         
+                                                                                                                    {          
                                                                                                                         result( err, null)
                                                                                                                     }else
                                                                                                                     {
                                                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                                                         { 
                                                                                                                             if(err)
-                                                                                                                            {   console.log("Error 15") ;        
+                                                                                                                            {          
                                                                                                                                 result( err, null)
                                                                                                                             }else
                                                                                                                             {
@@ -390,14 +373,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                                                   dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                                                   { 
                                                                                                                                     if(err)
-                                                                                                                                    {    console.log("Error 16") ;        
+                                                                                                                                    {         
                                                                                                                                         result( err, null)
                                                                                                                                     }else
                                                                                                                                     {
                                                                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                                                                         { 
                                                                                                                                             if(err)
-                                                                                                                                            {    console.log("Error 17") ;        
+                                                                                                                                            {           
                                                                                                                                                result( err, null)
                                                                                                                                             }else
                                                                                                                                             { 
@@ -418,14 +401,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=?,TI=?  WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                                                                 { 
                                                                                                                                                     if(err)
-                                                                                                                                                    {     console.log("Error 18") ;       
+                                                                                                                                                    {         
                                                                                                                                                         result( err, null)
                                                                                                                                                     }else
                                                                                                                                                     {
                                                                                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                                                                                         { 
                                                                                                                                                             if(err)
-                                                                                                                                                            {  console.log("Error 19 ") ;        
+                                                                                                                                                            {        
                                                                                                                                                                result( err, null)
                                                                                                                                                             }else
                                                                                                                                                             {  
@@ -445,14 +428,14 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                                                                                 { 
                                                                                                                                                                     if(err)
-                                                                                                                                                                    {     console.log("Error 20") ;     
+                                                                                                                                                                    {       
                                                                                                                                                                         result( err, null)
                                                                                                                                                                     }else
                                                                                                                                                                     {
                                                                                                                                                                         dbConn.query("SELECT *  FROM  user_account WHERE accountId =?",[referenceId],(err,res)=>
                                                                                                                                                                         { 
                                                                                                                                                                             if(err)
-                                                                                                                                                                            {    console.log("Error 21") ;      
+                                                                                                                                                                            {       
                                                                                                                                                                                result( err, null)
                                                                                                                                                                             }else
                                                                                                                                                                             {
@@ -472,8 +455,7 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                                                                                                                                                                                 dbConn.query(" UPDATE user_account SET level=?,LI=? ,TI=? WHERE accountId =? ",[level,LI,TI,accountId],(err,res)=>
                                                                                                                                                                                 { 
                                                                                                                                                                                     if(err)
-                                                                                                                                                                                    {     console.log("Error 22") ; 
-                                                                                                                                                                                          console.log("Error 11") ;   
+                                                                                                                                                                                    {     
                                                                                                                                                                                           result( err, null)
                                                                                                                                                                                     }else
                                                                                                                                                                                     {
