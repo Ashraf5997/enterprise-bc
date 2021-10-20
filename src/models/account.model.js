@@ -42,7 +42,6 @@ accountModel.getAllAccountRequest= (result) =>
 //  ACCOUNT ACT DEACTIVE 
 accountModel.actDact= (reqData,result) =>
 {
-    console.log(JSON.stringify(reqData)+"DA")
     dbConn.query("UPDATE user_account SET accountStatus=?,actDate=?,TDate=?,SLITDate=?,activatedBy=? WHERE userId =?",[reqData.accountStatus,reqData.actDate,reqData.TDate,reqData.SLITDate,reqData.username,reqData.userId],(err,res)=>{ 
     if(err)
     {         
@@ -81,6 +80,18 @@ accountModel.updateSLITDate= (reqData,result) =>
 accountModel.updateRI= (reqData,result) =>
 {
     dbConn.query("UPDATE user_account SET RI=?,TI=? WHERE accountId =?",[reqData.RI,reqData.TI,reqData.accountId],(err,res)=>{ 
+    if(err)
+    {         
+        result( err, null)
+    }else{
+         result(null ,res) 
+    }
+    })
+}
+//  RD update
+accountModel.updateRD= (reqData,result) =>
+{
+    dbConn.query("UPDATE user_account SET RD=? WHERE accountId =?",[reqData.RD,reqData.accountId],(err,res)=>{ 
     if(err)
     {         
         result( err, null)
@@ -177,7 +188,6 @@ accountModel.updateLevelIncome= (referenceId,result) =>
                 SI =SI+20;
                 dM =dM+1;
                  TI =TI+20+20;
-                console.log("TEST LI = "+LI)
                 dbConn.query(" UPDATE user_account SET level=?,LI=?,dMembers=?,TI=? ,SI=? WHERE accountId =? ",[level,LI,dM,TI,SI,accountId],(err,res)=>
                 { 
                     if(err)

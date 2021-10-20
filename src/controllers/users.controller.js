@@ -37,8 +37,6 @@ exports.createAdminUser = async(req ,ress , next )=>{
      }
   })
 }
-
-
 // DELETE ADMIN USER
 exports.deleteAdminUser = async( req ,ress , next )=>{
    auth (req , ress).then(res=>{
@@ -57,7 +55,6 @@ exports.deleteAdminUser = async( req ,ress , next )=>{
        }
     })
 }
-
 // UPDATE ADMIN USER
 exports.updateAdminUser = async( req ,ress , next )=>{
   const hashedPassword = await bcrypt.hash(req.body.password,10)
@@ -152,8 +149,6 @@ exports.loginUser = async(req ,res , next )=>{
            }
        })
 }
-
-
 // CUSTOMER LOGIN USER
 exports.customerLogin = async(req ,res , next )=>{
     const {contact,password } = req.body;
@@ -181,9 +176,6 @@ exports.customerLogin = async(req ,res , next )=>{
          }
      })
 }
-
-
-
 // CUSTOMER FORGOT PASSWORD
 exports.forgotPassword = async(req ,res , next )=>{
   const {contact } = req.body;
@@ -211,7 +203,6 @@ exports.forgotPassword = async(req ,res , next )=>{
       }
    })
 }
-
 // LOGOUT USER
 exports.logoutUser = async(req ,res , next )=>{
    log(req.body.refresh_token)

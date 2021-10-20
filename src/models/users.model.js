@@ -160,7 +160,7 @@ usersModel.updateAdminUser = (rData , result) =>
  // Customer login user
  usersModel.customerLogin = (reqData , result) =>
  {
-   dbConn.query('SELECT * FROM Register WHERE contact =?' , reqData.contact , (err , res)=>{
+   dbConn.query('SELECT * FROM register WHERE contact =?' , reqData.contact , (err , res)=>{
        if(err)
        {
             result( err, null)

@@ -50,6 +50,7 @@ router.get('/account/active/users',     accountController.getAllActiveUsers)
 router.post('/account/update/TDate',    accountController.updateTDate )
 router.post('/account/update/SLITDate', accountController.updateSLITDate )
 router.post('/account/update/RI',       accountController.updateRI )
+router.put('/account/update/RD/:RD',       accountController.updateRD )
 router.get('/account/down/link/members/:accountId',accountController.getDownLinkMembers )
 // PIN REQUEST
 router.post('/pin-request/create' , pinrequestController.createPinRequest )

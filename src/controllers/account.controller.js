@@ -27,6 +27,7 @@ exports.createAccount = async(req ,ress , next )=>{
          TDate         : new Date(),
          SLITDate      : new Date(),
          SLIS          :"0",
+         RD            :"0",
          activatedBy   :req.body.activatedBy,
      }
        // calling accountModel 
@@ -222,10 +223,6 @@ exports.updateSLITDate= async(req ,ress , next )=>{
         }
     })
  }
-
-
- 
- 
 // UPDATE RI
 exports.updateRI= async(req ,ress , next )=>{
     // console.log("ASHRAF ASHRAF JAMAL")
@@ -266,4 +263,25 @@ exports.updateRI= async(req ,ress , next )=>{
                     ress.json({status:200 ,message:'  DOWNLINK MEMBERS  FETCHED SUCCESSFULLY  ,' ,accountData:data}) 
                 }  
         })
+ }
+ // UPDATE RD REMAINING DAYS
+exports.updateRD= async(req ,ress , next )=>{
+      //Authentication
+     auth (req , ress).then(res=>{
+        if(res !=" " && res != null){
+            if( res.accesstype == "Manager" || res.accesstype == "Admin" || res.accesstype == "Customer"){
+                accountModel.updateRD(req.body , (err , data)=>{
+                    if(err){
+                            ress.json({status:409 ,message:'Cannot update your RD , please contact with  manager ' }) 
+                        }else if( data=""){
+                            ress.json({status:409 ,message:'  account RD not found please contact your manager  ,' ,accountData:data})
+                        }else if( data !=""){
+                            ress.json({status:200 ,message:'  Your  RD is updated successfully  ,' ,accountData:data}) 
+                        }  
+                })
+            }else{
+                    ress.json({status:401 ,message:'Not Authorised '})   ; 
+            }
+        }
+    })
  }
