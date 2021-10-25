@@ -167,6 +167,20 @@ exports.getAllActiveUsers = async(req , ress , next)=>{
         }
     }) 
 } 
+
+//   GET TOTAL NUMBERS OF ACTIVE ACOUNT USERSS  //COUNT
+exports.getAllActiveUserss = async(req , ress , next)=>{
+    accountModel.getAllActiveUserss(req.params.userId,(err, data)=>{
+        if(err){
+            ress.json({status:409 ,message:' Server error try latter  ' }) 
+        }else if( data == ""){
+            ress.json({status:404,message:'No Active Users Exist ' }) 
+        }else{
+            ress.json({status:200 ,message:'Count of  active users fetched successfully ' ,accountData:data})    
+        }
+    }) 
+} 
+ 
  
 
 // UPDATE TDATE

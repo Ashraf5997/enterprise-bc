@@ -123,6 +123,17 @@ accountModel.getAllActiveUsers= (result) =>
      }
    })
 }
+// GET  ALL ACTIVE USERSSS COUNT 
+accountModel.getAllActiveUserss= (userId,result) =>
+{
+   dbConn.query( "SELECT COUNT( * ) as 'count' FROM user_account  WHERE accountStatus='active' AND  userId >=?",[userId],(err , res)=>{
+     if(err){
+        result(err , null)
+     }else{
+        result(null , res) 
+     }
+   })
+}
 //  GET DOWNLINK MEMBERS 
 accountModel.getDownLinkMembers = (refId,result)=>{
     dbConn.query("SELECT *  FROM  user_account WHERE referenceId =?",[refId],(err,res)=>{ 
@@ -166,7 +177,7 @@ accountModel.updateLevelIncome= (referenceId,result) =>
             result( err, null)
         }else
         {
-            if( res[0].referenceId == "Admin0001")
+            if( res[0].referenceId == Admin000)
             {
                 result(null ,res) 
             }else

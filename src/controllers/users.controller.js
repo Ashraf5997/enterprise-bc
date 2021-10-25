@@ -10,14 +10,13 @@ require("dotenv").config( );
 const auth    =     require('../middlewares/auth');
 // CREATE ADMIN USER
 exports.createAdminUser = async(req ,ress , next )=>{
-  const {fullname , contact , accesstype, createdBy ,password } = req.body;
-  const hashedPassword = await bcrypt.hash(password,10)
+  const {fullname , contact , accesstype, createdBy  } = req.body;
+  //const hashedPassword = await bcrypt.hash(password,10)
   const userObj ={
     fullname,
     contact,
     accesstype,
     createdBy,
-    password : hashedPassword,
     joiningDate: new Date(),
   }
   auth (req , ress).then(res=>{
@@ -25,10 +24,11 @@ exports.createAdminUser = async(req ,ress , next )=>{
       if(res.accesstype == "Manager"){
         usersModel.cusReg(userObj , (err , data)=>{
           if(err){
-            ress.json({status:409 ,message:'User already exist' })
+            console.log(err)
+            ress.json({status:409 ,message:'Server error try later' })
           }else{
             access_token= JwtService.sign({id:data.insertId , accesstype : userObj.accesstype, fullname:userObj.fullname})
-            ress.json({status:201 ,message:'New  admin user created successfully' ,newUserId:data.insertId , access_token}) 
+            ress.json({status:201 ,message:'New  admin/manager user created successfully' ,newUserId:data.insertId , access_token}) 
           }
         })
         }else{
@@ -57,7 +57,7 @@ exports.deleteAdminUser = async( req ,ress , next )=>{
 }
 // UPDATE ADMIN USER
 exports.updateAdminUser = async( req ,ress , next )=>{
-  const hashedPassword = await bcrypt.hash(req.body.password,10)
+ // const hashedPassword = await bcrypt.hash(req.body.password,10)
    auth (req , ress).then(res=>{
        if(res !=" " && res != null){
          if(res.accesstype == "Manager"){
@@ -66,7 +66,6 @@ exports.updateAdminUser = async( req ,ress , next )=>{
                   contact  :req.body.contact,
                   accesstype: req.body.accesstype,
                   id   : req.body.userId ,
-                  password :hashedPassword
               }
                usersModel.updateAdminUser( userObj, (err , data)=>{
                     if(err){
@@ -83,23 +82,29 @@ exports.updateAdminUser = async( req ,ress , next )=>{
 }
 // CREATE CUSTOMER USER
 exports.customerRegistration = async(req ,ress , next )=>{
-    const password = req.body.password;
-    const hashedPassword = await bcrypt.hash(password,10)
+  //  const password = req.body.password;
+  //  const hashedPassword = await bcrypt.hash(password,10)
     const userObj ={
         fullname :req.body.fullname,
         contact  :req.body.contact,
         joiningDate: new Date(),
-        password : hashedPassword,
+     //   password : hashedPassword,
         accesstype:"Customer",
         createdBy:"self",
     }
      // calling usersModel 
      usersModel.cusReg(userObj , (err , data)=>{
-         if(err){
-                ress.json({status:409 ,message:'Contact Number already exist try with another' })
+            if(err){
+               // console.log(err)
+                ress.json({status:409 ,message:'Server error try later' })
              }else{
-               access_token= JwtService.sign({id:data.insertId , accesstype :"customerUser", fullname:userObj.fullname})
-               ress.json({status:201 ,message:' Registration Successful ,Sign-in now ' ,newUserId:data.insertId , access_token})    
+           /*   let number = req.body.contact;
+              let API_KEY = process.env.API_KEY;
+              var password =req.body.password;
+              let message = "Your password  for login is : "+password+" do not share with others regards: www.enterpricebc.com, THANKS";
+              const response =  fast2sms.sendMessage({authorization:API_KEY,message:message,numbers:[number]})*/
+            //   access_token= JwtService.sign({id:data.insertId , accesstype :"customerUser", fullname:userObj.fullname})
+               ress.json({status:201 ,message:' Registration Successful ,Sign-in now '})    
          }  
      })
 }
@@ -151,30 +156,25 @@ exports.loginUser = async(req ,res , next )=>{
 }
 // CUSTOMER LOGIN USER
 exports.customerLogin = async(req ,res , next )=>{
-    const {contact,password } = req.body;
-    const userObj ={
-        contact,
-        password
-    }
+ 
     // calling usersModel 
-     usersModel.customerLogin(userObj , (err , data)=>{
+     usersModel.customerLogin(req.params.phone , (err , data , next)=>{
          if(err){
-            res.json({status:500 ,message:'SERVER ERROR' ,errData:err}) 
+          res.json({status:500 ,message:'Server error' ,errData:err}) 
          }else if(data ==""){
             res.json({status:404 ,message:'Contact not found' ,Data:data})   
          }
          else{
-           bcryptedPassword = data[0].password;
-           bcrypt.compare(userObj.password , bcryptedPassword ,(err , result )=>{  
-              if(result){
-                 access_token= JwtService.sign({id:data[0].id , accesstype :data[0].accesstype , fullname:data[0].fullname})
-                 res.json({status:200 ,message:'Access Verified' ,userData:data , access_token:access_token}) 
-                  }else{
-                      res.json({status:403 ,message:'Access Denied Invalid Credentials'})    
-                  }
-            })
+       //   access_token= JwtService.sign({id:data[0].id , accesstype :data[0].accesstype , fullname:data[0].fullname})
+          res.json({status:200 ,message:'Access Verified' ,userData:data}) 
          }
      })
+         
+}
+// GET TOKEN
+exports.getToken= async(req,res,next)=>{
+      access_token= JwtService.sign({id:req.body.id , accesstype :req.body.accesstype , fullname:req.body.fullname})
+      res.json({status:200 ,message:'token created' , access_token: access_token})    
 }
 // CUSTOMER FORGOT PASSWORD
 exports.forgotPassword = async(req ,res , next )=>{
@@ -241,7 +241,7 @@ exports.getOtp = async(req ,res)=>{
         let number = req.params.number;
         let API_KEY = process.env.API_KEY;
         var otp = Math.floor(1000 + Math.random() * 9000);
-        let message = "Your 4 digits otp for registration is : "+otp+" do not share with others regards: www.enterpricebc.com, THANKS";
+        let message = "Your 4 digits otp  is : "+otp+" do not share with others regards: www.enterpricebc.com, THANKS";
         const response = await fast2sms.sendMessage({authorization:API_KEY,message:message,numbers:[number]})
         if(response.return = true){
             res.json({status:200 ,message:otp })  

@@ -14,9 +14,9 @@ const port     =  process.env.PORT || 9060;
 const baseUrl  = '/api/v1';
 // TASK ROUTES
 app.use(baseUrl,Routes);
-app.use(express.static(path.join(__dirname,'public')));
+//app.use(express.static(path.join(__dirname,'public')));
 app.use(errorHandler);
-app.listen(()=>{
+app.listen(port,()=>{
     console.log("Express server is running at PORT "+port);
 })
 

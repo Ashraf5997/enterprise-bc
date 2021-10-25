@@ -12,10 +12,11 @@ const pinrequestController      = require('../controllers/pinrequest.controller'
 const withdrawalController      = require('../controllers/withdrawal.controller');
 // ACTION URL 
 router.post('/login',           usersController.loginUser);
-router.post('/customerlogin',   usersController.customerLogin);
+router.get('/customerlogin/:phone',   usersController.customerLogin);
 router.post('/logout',          usersController.logoutUser);
 router.post('/register',        usersController.customerRegistration);
 router.get('/otpForReg/:number',usersController.getOtp)
+router.post('/getToken',usersController.getToken)
 // ADMIN USER URL
 router.post('/user',            usersController.createAdminUser);
 router.get('/get/user/admin' ,  usersController.getAllAdminUser)
@@ -47,6 +48,7 @@ router.get('/account/get/all/request/active',       accountController.getAllAcco
 router.post('/account/active/deactive',           accountController.deactActAccountRequest)
 router.get('/account/search/accountId/:accountId',  accountController.searchAccountId)
 router.get('/account/active/users',     accountController.getAllActiveUsers)
+router.get('/account/active/userss/:userId',     accountController.getAllActiveUserss)
 router.post('/account/update/TDate',    accountController.updateTDate )
 router.post('/account/update/SLITDate', accountController.updateSLITDate )
 router.post('/account/update/RI',       accountController.updateRI )

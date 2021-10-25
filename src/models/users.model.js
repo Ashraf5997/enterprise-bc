@@ -4,7 +4,7 @@
      this.Id              =     user.Id;
      this.fullname        =     user.fullname;
      this.email           =     user.email;
-     this.password        =     user.password;
+    // this.password        =     user.password;
      this.createdby       =     user.createdby;
      this.accesstype      =     user.accesstype;
 
@@ -50,7 +50,7 @@ usersModel.createUser = (reqData , result) =>
   })
 }
 
- // create customer user
+ // create cadmin user
  usersModel.cusReg = (reqData , result) =>
  {
    dbConn.query('INSERT INTO register SET?' , reqData , (err , res)=>{
@@ -65,8 +65,8 @@ usersModel.createUser = (reqData , result) =>
 // UPDATE ADMIN USER
 usersModel.updateAdminUser = (rData , result) =>
 {
-  dbConn.query("UPDATE register SET fullname=?, password=?, contact=?,accesstype=? WHERE id =?", 
-  [rData.fullname ,rData.password, rData.contact,rData.accesstype , rData.id] ,(err,res)=>{
+  dbConn.query("UPDATE register SET fullname=?,  contact=?,accesstype=? WHERE id =?", 
+  [rData.fullname , rData.contact,rData.accesstype , rData.id] ,(err,res)=>{
       if(err)
       {
            result( err, null)
@@ -158,9 +158,9 @@ usersModel.updateAdminUser = (rData , result) =>
  }
 
  // Customer login user
- usersModel.customerLogin = (reqData , result) =>
+ usersModel.customerLogin = (phone , result) =>
  {
-   dbConn.query('SELECT * FROM register WHERE contact =?' , reqData.contact , (err , res)=>{
+   dbConn.query('SELECT * FROM register WHERE contact =?' , phone , (err , res)=>{
        if(err)
        {
             result( err, null)
