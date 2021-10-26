@@ -177,7 +177,7 @@ accountModel.updateLevelIncome= (referenceId,result) =>
             result( err, null)
         }else
         {
-            if( res[0].referenceId == Admin000)
+            if( res[0].referenceId == "Admin0001")
             {
                 result(null ,res) 
             }else
